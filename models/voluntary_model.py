@@ -17,7 +17,7 @@ class Voluntary(db.Model):
     number = db.Column(db.String(60), nullable=False)
     cpf_cnpj = db.Column(db.String(14), nullable=False)
     id_blood_type = db.Column(db.Integer, ForeignKey("blood_types.id"), nullable=True)
-    blood_type = relationship("BloodType", back_populates="voluntary")
+    blood_type_relationship = relationship("BloodType", back_populates="voluntary_relationship")
 
     def __init__(self, voluntary_dto: VoluntaryDto) -> None:
         self.id = None
