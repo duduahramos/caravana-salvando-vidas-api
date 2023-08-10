@@ -21,16 +21,25 @@ class VolunteerService:
     def update(self, id: str) -> VolunteerModel:
         volunteer_model = VolunteerModel.query.filter_by(id=id).first()
 
+        volunteer_json = request.get_json()
+        volunteer_dto = VolunteerDto().load(volunteer_json)
         if volunteer_model:
-            volunteer_json = request.get_json()
-            volunteer_dto = VolunteerDto().load(volunteer_json)
+            volunteer_model.name = volunteer_dto.get("name")
+            volunteer_model.number = volunteer_dto.get("number")
+            volunteer_model.cpf_cnpj = volunteer_dto.get("cpf_cnpj")
+            volunteer_model.blood_type = volunteer_dto.get("blood_type")
 
-            volunteer_model.name = volunteer_dto.name
-            volunteer_model.number = volunteer_dto.number
-            volunteer_model.cpf_cnpj = volunteer_dto.cpf_cnpj
-            volunteer_model.blood_type = volunteer_dto.blood_type
+            db.session.commit()
 
-            print("TESTE")
+            return volunteer_model.to_dict(), 202
+        else:
+            volunteer_model = VolunteerModel(volunteer_dto)
+
+            db.session.add(volunteer_model)
+            db.session.commit()
+
+            return volunteer_model.to_dict(), 201
+
 
     def get_all(self) -> list:
         volunteer_list = VolunteerModel.query.order_by(VolunteerModel.id).all()

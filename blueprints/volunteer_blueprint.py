@@ -61,7 +61,9 @@ def put_volunteer(id):
     try:
         volunteer_service = VolunteerService()
 
-        volunteer_service.update()
+        volunteer_dict, status_code = volunteer_service.update(id)
+
+        return volunteer_dict, status_code, {"teste_header_response": "123"}
     except Exception as e:
         print(e.args)
 
