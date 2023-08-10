@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from marshmallow import ValidationError
 
-from dtos.voluntary_dto import VoluntaryDto
+from dtos.volunteer_dto import VolunteerDto
 
 
 db = SQLAlchemy()
@@ -16,9 +16,9 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 
-from models.voluntary_model import Voluntary as VoluntaryModel
+from models.volunteer_model import Volunteer as VolunteerModel
 from models.blood_type_model import BloodType as BloodTypeModel
-from services.voluntary_service import VoluntaryService
+from services.volunteer_service import VolunteerService
 
 
 with app.app_context():
@@ -32,16 +32,16 @@ def hello_world():
 
 # REVER NECESSIDADE DO UUID
 @app.route("/voluntario", methods=["POST"])
-def post_voluntary():
-    voluntary_json = request.get_json()
+def post_volunteer():
+    volunteer_json = request.get_json()
 
     try:
-        voluntary_dto = VoluntaryDto().load(voluntary_json)
+        volunteer_dto = VolunteerDto().load(volunteer_json)
 
-        voluntary_service = VoluntaryService()
-        voluntary_dict = voluntary_service.save(voluntary_dto)
+        volunteer_service = VolunteerService()
+        volunteer_dict = volunteer_service.save(volunteer_dto)
 
-        return voluntary_dict, 201, {"teste": "123"}
+        return volunteer_dict, 201, {"teste": "123"}
     except ValidationError as e:
         print(e.args)
 
