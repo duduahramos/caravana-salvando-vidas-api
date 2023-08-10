@@ -16,7 +16,7 @@ class VoluntaryService:
         db.session.add(voluntary_model)
         db.session.commit()
 
-        return voluntary_model.voluntary_to_dict()
+        return voluntary_model.to_dict()
 
     def update(self, id: str) -> VoluntaryModel:
         voluntary_model = VoluntaryModel.query.filter_by(id=id).first()
