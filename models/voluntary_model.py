@@ -27,14 +27,44 @@ class Voluntary(db.Model):
         self.cpf_cnpj = voluntary_dto.get("cpf_cnpj")
         self.id_blood_type = voluntary_dto.get("blood_type")
 
-    def voluntary_to_dict(self):
-        teste = {
+    def to_dict(self):
+        return {
             "id": self.id,
-            "uuid_bd": str(uuid.UUID(bytes=self.uuid_bd)),
+            # "uuid_bd": str(uuid.UUID(bytes=self.uuid_bd)),
             "name": self.name,
             "number": self.number,
             "cpf_cnpj": self.cpf_cnpj,
             "blood_type": BloodType.query.filter_by(id=self.id_blood_type).first().description
         }
 
-        return teste
+    @property
+    def name(self):
+        return self.name
+
+    @name.setter
+    def name(self, name):
+        self.name = name
+
+    @property
+    def number(self):
+        return self.number
+
+    @number.setter
+    def number(self, number):
+        self.number = number
+
+    @property
+    def cpf_cnpj(self):
+        return self.cpf_cnpj
+
+    @cpf_cnpj.setter
+    def cpf_cnpj(self, cpf_cnpj):
+        self.cpf_cnpj = cpf_cnpj
+
+    @property
+    def id_blood_type(self):
+        return BloodType.query.filter_by(id=self.id_blood_type).first().description
+
+    @id_blood_type.setter
+    def id_blood_type(self, id_blood_type):
+        self.id_blood_type = id_blood_type
