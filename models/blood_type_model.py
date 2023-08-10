@@ -8,4 +8,4 @@ class BloodType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(10), nullable=False)
-    voluntary_relationship = relationship("Voluntary", back_populates="blood_type_relationship")
+    volunteer_relationship = relationship("Volunteer", back_populates="blood_type_relationship")
