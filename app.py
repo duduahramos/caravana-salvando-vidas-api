@@ -1,9 +1,6 @@
-from flask import Flask, request, Response
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from marshmallow import ValidationError
-
-from dtos.volunteer_dto import VolunteerDto
 
 
 db = SQLAlchemy()
@@ -16,9 +13,11 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 
-from models.volunteer_model import Volunteer as VolunteerModel
-from models.blood_type_model import BloodType as BloodTypeModel
-from services.volunteer_service import VolunteerService
+# Controllers
+from blueprints.volunteer_blueprint import volunteer_blueprint
+
+
+app.register_blueprint(volunteer_blueprint)
 
 
 with app.app_context():
@@ -28,24 +27,3 @@ with app.app_context():
 @app.route("/hello_world")
 def hello_world():
     return {"message": "Hello Caravana!"}
-
-
-# REVER NECESSIDADE DO UUID
-@app.route("/voluntario", methods=["POST"])
-def post_volunteer():
-    volunteer_json = request.get_json()
-
-    try:
-        volunteer_dto = VolunteerDto().load(volunteer_json)
-
-        volunteer_service = VolunteerService()
-        volunteer_dict = volunteer_service.save(volunteer_dto)
-
-        return volunteer_dict, 201, {"teste": "123"}
-    except ValidationError as e:
-        print(e.args)
-
-    except Exception as e:
-        print(e.args)
-
-        return {"message": "Ocorreu um erro!"}
