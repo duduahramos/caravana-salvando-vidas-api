@@ -30,14 +30,13 @@ class VolunteerService:
             volunteer_model.cpf_cnpj = volunteer_dto.cpf_cnpj
             volunteer_model.blood_type = volunteer_dto.blood_type
 
-            print("Teste")
+            print("TESTE")
 
-    def get_all(self) -> List[VolunteerModel]:
+    def get_all(self) -> list:
         volunteer_list = VolunteerModel.query.order_by(VolunteerModel.id).all()
 
         volunteer_dict_list = {}
 
-        # volunteer_dict_list["count"] = len(volunteer_list)
         volunteer_dict_list["voluntarios"] = [x.to_dict() for x in volunteer_list]
 
         if volunteer_list:
@@ -48,7 +47,7 @@ class VolunteerService:
         return [volunteer_dict_list, status_code]
 
     def get_one_by_id(self, id: str) -> list:
-        volunteer_model = VolunteerModel.query.filter_by(id=int(id)).first()
+        volunteer_model = VolunteerModel.query.filter_by(id=id).first()
 
         if volunteer_model:
             return [volunteer_model.to_dict(), 200]

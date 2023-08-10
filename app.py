@@ -13,10 +13,6 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 
-# Models
-from models.volunteer_model import Volunteer as VolunteerModel
-from models.blood_type_model import BloodType as BloodTypeModel
-
 # Controllers
 from blueprints.volunteer_blueprint import volunteer_blueprint
 

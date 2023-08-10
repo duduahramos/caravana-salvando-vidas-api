@@ -28,7 +28,7 @@ class Volunteer(db.Model):
         self.id_blood_type = volunteer_dto.get("blood_type")
 
     def to_dict(self):
-        teste = {
+        return {
             "id": self.id,
             # "uuid_bd": str(uuid.UUID(bytes=self.uuid_bd)),
             "name": self.name,
@@ -37,36 +37,34 @@ class Volunteer(db.Model):
             "blood_type": BloodType.query.filter_by(id=self.id_blood_type).first().description
         }
 
-        return teste
+    # @property
+    # def name(self):
+    #     return self.name
 
-    @property
-    def name(self):
-        return self.name
+    # @name.setter
+    # def name(self, name):
+    #     self.name = name
 
-    @name.setter
-    def name(self, name):
-        self.name = name
+    # @property
+    # def number(self):
+    #     return self.number
 
-    @property
-    def number(self):
-        return self.name
+    # @number.setter
+    # def number(self, number):
+    #     self.number = number
 
-    @number.setter
-    def number(self, number):
-        self.number = number
+    # @property
+    # def cpf_cnpj(self):
+    #     return self.cpf_cnpj
 
-    @property
-    def cpf_cnpj(self):
-        return self.name
+    # @cpf_cnpj.setter
+    # def cpf_cnpj(self, cpf_cnpj):
+    #     self.cpf_cnpj = cpf_cnpj
 
-    @cpf_cnpj.setter
-    def cpf_cnpj(self, cpf_cnpj):
-        self.cpf_cnpj = cpf_cnpj
+    # @property
+    # def id_blood_type(self):
+    #     return BloodType.query.filter_by(id=self.id_blood_type).first().description
 
-    @property
-    def id_blood_type(self):
-        return self.name
-
-    @id_blood_type.setter
-    def id_blood_type(self, id_blood_type):
-        self.id_blood_type = id_blood_type
+    # @id_blood_type.setter
+    # def id_blood_type(self, id_blood_type):
+    #     self.id_blood_type = id_blood_type
