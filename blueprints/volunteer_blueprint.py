@@ -18,10 +18,11 @@ def post_volunteer():
         volunteer_service = VolunteerService()
         volunteer_dict = volunteer_service.save(volunteer_dto)
 
-        return volunteer_dict, 201, {"teste_header_response": "123"}
+        return volunteer_dict, 201
     except ValidationError as e:
-        print("BODY REQUEST INVÁLIDO!")
         print(e.args)
+
+        return {"message": "Corpo da requisação inválido."}, 500
     except Exception as e:
         print(e.args)
 
@@ -29,13 +30,13 @@ def post_volunteer():
 
 
 @volunteer_blueprint.route("/voluntario", methods=["GET"])
-def get_volunteers():
+def get_all_volunteers():
     try:
         volunteer_service = VolunteerService()
 
         volunteer_dict_list, status_code = volunteer_service.get_all()
 
-        return volunteer_dict_list, status_code, {"teste_header_response": "123"}
+        return volunteer_dict_list, status_code
     except Exception as e:
         print(e.args)
 
@@ -43,13 +44,13 @@ def get_volunteers():
 
 
 @volunteer_blueprint.route("/voluntario/<id>", methods=["GET"])
-def get_volunteer(id):
+def get_one_volunteer(id):
     try:
         volunteer_service = VolunteerService()
 
         volunteer_dict, status_code = volunteer_service.get_one_by_id(id)
 
-        return volunteer_dict, status_code, {"teste_header_response": "123"}
+        return volunteer_dict, status_code
     except Exception as e:
         print(e.args)
 
@@ -63,7 +64,25 @@ def put_volunteer(id):
 
         volunteer_dict, status_code = volunteer_service.update(id)
 
-        return volunteer_dict, status_code, {"teste_header_response": "123"}
+        return volunteer_dict, status_code
+    except ValidationError as e:
+        print(e.args)
+
+        return {"message": "Corpo da requisação inválido."}, 500
+    except Exception as e:
+        print(e.args)
+
+        return {"message": "Ocorreu um erro."}, 500
+
+
+@volunteer_blueprint.route("/voluntario/<id>", methods=["DELETE"])
+def delete_volunteer(id):
+    try:
+        volunteer_service = VolunteerService()
+
+        volunteer_dict, status_code = volunteer_service.delete(id)
+
+        return volunteer_dict, status_code
     except Exception as e:
         print(e.args)
 

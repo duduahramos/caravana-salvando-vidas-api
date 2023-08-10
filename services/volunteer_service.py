@@ -18,11 +18,11 @@ class VolunteerService:
 
         return volunteer_model.to_dict()
 
-    def update(self, id: str) -> VolunteerModel:
-        volunteer_model = VolunteerModel.query.filter_by(id=id).first()
-
+    def update(self, id: str) -> list:
         volunteer_json = request.get_json()
         volunteer_dto = VolunteerDto().load(volunteer_json)
+
+        volunteer_model = VolunteerModel.query.filter_by(id=id).first()
         if volunteer_model:
             volunteer_model.name = volunteer_dto.get("name")
             volunteer_model.number = volunteer_dto.get("number")
@@ -40,6 +40,16 @@ class VolunteerService:
 
             return volunteer_model.to_dict(), 201
 
+    def delete(self, id: str) -> list:
+        volunteer_model = VolunteerModel.query.filter_by(id=id).first()
+
+        if volunteer_model:
+            db.session.delete(volunteer_model)
+            db.session.commit()
+
+            return [{"message": "Registro deletado."}, 200]
+        else:
+            return [{"message": "Registro não localizado."}, 404]
 
     def get_all(self) -> list:
         volunteer_list = VolunteerModel.query.order_by(VolunteerModel.id).all()
@@ -61,7 +71,7 @@ class VolunteerService:
         if volunteer_model:
             return [volunteer_model.to_dict(), 200]
         else:
-            return [{}, 404]
+            return [{"message": "Registro não localizado."}, 404]
 
     # def get_by_uuid_bd(self, uuid_bytes: bytes) -> VolunteerModel:
     #     volunteer_model = VolunteerModel.query.filter_by(uuid_bd=uuid_bytes).first()

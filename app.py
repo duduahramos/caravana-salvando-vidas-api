@@ -1,10 +1,14 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
 db = SQLAlchemy()
 app = Flask(__name__)
+CORS(app)
+# cors = CORS(app, resources={r"/voluntario/*": {"origins": "*"}})
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root@localhost/caravana_db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
