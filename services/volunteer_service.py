@@ -23,7 +23,7 @@ class VolunteerService:
 
         if volunteer_model:
             volunteer_json = request.get_json()
-            volunteer_dto = volunteerDto().load(volunteer_json)
+            volunteer_dto = VolunteerDto().load(volunteer_json)
 
             volunteer_model.name = volunteer_dto.name
             volunteer_model.number = volunteer_dto.number
