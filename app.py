@@ -26,8 +26,3 @@ app.register_blueprint(volunteer_blueprint)
 
 with app.app_context():
     db.create_all()
-
-
-@app.route("/hello_world")
-def hello_world():
-    return {"message": "Hello Caravana!"}

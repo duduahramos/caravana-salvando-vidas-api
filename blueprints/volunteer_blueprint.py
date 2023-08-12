@@ -22,7 +22,7 @@ def post_volunteer():
     except ValidationError as e:
         print(e.args)
 
-        return {"message": "Corpo da requisação inválido."}, 500
+        return {"message": "Corpo da requisação inválido."}, 400
     except Exception as e:
         print(e.args)
 
@@ -32,11 +32,13 @@ def post_volunteer():
 @volunteer_blueprint.route("/voluntario", methods=["GET"])
 def get_all_volunteers():
     try:
+        teste = request
+
         volunteer_service = VolunteerService()
 
-        volunteer_dict_list, status_code = volunteer_service.get_all()
+        volunteer_dict_list = volunteer_service.get_all()
 
-        return volunteer_dict_list, status_code
+        return volunteer_dict_list, 200
     except Exception as e:
         print(e.args)
 
@@ -50,7 +52,7 @@ def get_one_volunteer(id):
 
         volunteer_dict, status_code = volunteer_service.get_one_by_id(id)
 
-        return volunteer_dict, status_code
+        return volunteer_dict, 200
     except Exception as e:
         print(e.args)
 
