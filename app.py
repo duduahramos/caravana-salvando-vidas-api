@@ -18,9 +18,11 @@ migrate = Migrate(app, db)
 
 
 # Controllers
+from blueprints.user_blueprint import user_blueprint
 from blueprints.volunteer_blueprint import volunteer_blueprint
 
 
+app.register_blueprint(user_blueprint)
 app.register_blueprint(volunteer_blueprint)
 
 

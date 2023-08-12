@@ -2,7 +2,7 @@ from flask import request
 from sqlalchemy import desc
 
 from app import db
-from dtos.volunteer_dto import VolunteerDto
+from schemas.volunteer_schema import VolunteerSchema
 from models.volunteer_model import Volunteer as VolunteerModel
 
 
@@ -10,8 +10,8 @@ class VolunteerService:
     def __init__(self) -> None:
         pass
 
-    def save(self, volunteer_dto: VolunteerDto) -> VolunteerModel:
-        volunteer_model = VolunteerModel(volunteer_dto)
+    def save(self, volunteer_schema: VolunteerSchema) -> VolunteerModel:
+        volunteer_model = VolunteerModel(volunteer_schema)
 
         db.session.add(volunteer_model)
         db.session.commit()
@@ -20,20 +20,20 @@ class VolunteerService:
 
     def update(self, id: str) -> list:
         volunteer_json = request.get_json()
-        volunteer_dto = VolunteerDto().load(volunteer_json)
+        volunteer_schema = VolunteerSchema().load(volunteer_json)
 
         volunteer_model = VolunteerModel.query.filter_by(id=id).first()
         if volunteer_model:
-            volunteer_model.name = volunteer_dto.get("name")
-            volunteer_model.number = volunteer_dto.get("number")
-            volunteer_model.cpf_cnpj = volunteer_dto.get("cpf_cnpj")
-            volunteer_model.blood_type = volunteer_dto.get("blood_type")
+            volunteer_model.name = volunteer_schema.get("name")
+            volunteer_model.number = volunteer_schema.get("number")
+            volunteer_model.cpf_cnpj = volunteer_schema.get("cpf_cnpj")
+            volunteer_model.blood_type = volunteer_schema.get("blood_type")
 
             db.session.commit()
 
             return volunteer_model.to_dict(), 202
         else:
-            volunteer_model = VolunteerModel(volunteer_dto)
+            volunteer_model = VolunteerModel(volunteer_schema)
 
             db.session.add(volunteer_model)
             db.session.commit()
@@ -74,24 +74,26 @@ class VolunteerService:
             field = VolunteerModel.cpf_cnpj
         elif search_field == "BLOOD_TYPE":
             field = VolunteerModel.id_blood_type
+        elif search_field == "CREATED_ON":
+            field = VolunteerModel.created_on
         else:
             field = None
 
         if field:
-            volunteer_list = db.paginate(VolunteerModel.query.filter(field.like(f"%{search}%")).order_by(order_clause), page=page, per_page=per_page)
+            volunteers_list = db.paginate(VolunteerModel.query.filter(field.like(f"%{search}%")).order_by(order_clause), page=page, per_page=per_page)
         else:
-            volunteer_list = db.paginate(VolunteerModel.query.order_by(order_clause), page=page, per_page=per_page)
+            volunteers_list = db.paginate(VolunteerModel.query.order_by(order_clause), page=page, per_page=per_page)
 
-        volunteer_dict_list = {
-            "items_total": volunteer_list.total,
-            "pages_total": volunteer_list.pages,
-            "items_current_page": len(volunteer_list.items),
-            "current_page": volunteer_list.page
+        volunteers_dict_list = {
+            "items_total": volunteers_list.total,
+            "pages_total": volunteers_list.pages,
+            "items_current_page": len(volunteers_list.items),
+            "current_page": volunteers_list.page
         }
 
-        volunteer_dict_list["voluntarios"] = [x.to_dict() for x in volunteer_list]
+        volunteers_dict_list["voluntarios"] = [volunteer.to_dict() for volunteer in volunteers_list]
 
-        return volunteer_dict_list
+        return volunteers_dict_list
 
     def get_one_by_id(self, id: str) -> dict:
         volunteer_model = VolunteerModel.query.filter_by(id=id).first()
