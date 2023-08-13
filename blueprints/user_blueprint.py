@@ -40,7 +40,7 @@ def get_all_users():
         user_service = UserService()
         users_dict_list = user_service.get_all()
 
-        return users_dict_list, 201
+        return users_dict_list, 200
     except Exception as e:
         print(e.args)
 
