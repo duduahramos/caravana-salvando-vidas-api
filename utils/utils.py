@@ -1,6 +1,8 @@
 import hashlib
 import uuid
 
+from configs import config
+
 
 def only_number(value: str) -> str:
     # Remova qualquer caractere não numérico do valor
@@ -14,7 +16,7 @@ def generate_uuid():
 
 
 def generate_password_hash(password: str) -> str:
-    _secret = "429af07e-84b3-45e3-8037-6146594a2a37"
+    _secret = config.SECRET_KEY
 
     password_plus_secret = bytes(password + _secret, "ISO8859_1")
 

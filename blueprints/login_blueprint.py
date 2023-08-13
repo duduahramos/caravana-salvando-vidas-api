@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from marshmallow import ValidationError
 
-from schemas.user_schema import UserSchema
+from schemas.login_schema import LoginSchema
 from services.login_service import LoginService
 
 
@@ -13,10 +13,11 @@ def login():
     login_json = request.get_json()
 
     try:
-        user_schema = UserSchema.load(login_json)
+        login_schema = LoginSchema().load(login_json)
 
         login_service = LoginService()
-        login_json_response = login_service.login()
+        login_service.get_user_by_email(login_schema)
+        login_json_response = login_service.login(login_schema)
 
     except ValidationError as e:
         print(e.args)
