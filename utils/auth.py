@@ -1,12 +1,11 @@
-from flask import request, jsonify
-import jwt
-from utils.utils import generate_password_hash
 from functools import wraps
+import jwt
+from flask import request
+import json
+import cryptocode
 
-from app import db
+from utils.utils import generate_password_hash
+from configs.config import SECRET_KEY_JWT, SECRET_KEY_SESSION
 
 
-def auth():
-    auth = request.authorization
 
-    print("teste")

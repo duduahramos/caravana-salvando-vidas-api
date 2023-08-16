@@ -10,15 +10,18 @@ login_blueprint = Blueprint("login_blueprint", __name__)
 
 @login_blueprint.route("/login", methods=["POST"])
 def login():
-    login_json = request.get_json()
-
     try:
+        if not request.data:
+            return {"message": "Corpo de requisição inválido."}
+
+        login_json = request.get_json()
         login_schema = LoginSchema().load(login_json)
 
         login_service = LoginService()
-        login_service.get_user_by_email(login_schema)
-        login_json_response = login_service.login(login_schema)
+        user_model = login_service.get_user_by_user_name(login_schema)
+        login_json_response, status_code = login_service.login(login_schema)
 
+        return login_json_response, status_code
     except ValidationError as e:
         print(e.args)
 
