@@ -35,18 +35,3 @@ def password_is_correct(senha_request, senha_bd) -> bool:
     else:
         return False
 
-
-def create_jwt(user_dict):
-    print(user_dict)
-
-    session_dict = {
-        "id": user_dict.get("id"),
-        "user_name": user_dict.get("user_name"),
-        "admin": user_dict.get("admin")
-    }
-
-    session_str = json.dumps(session_dict)
-    session_encrypt_str = cryptocode.encrypt(session_str, SECRET_KEY_SESSION)
-    token = jwt.encode({"session": session_encrypt_str}, SECRET_KEY_JWT, algorithm="HS256")
-
-    return token

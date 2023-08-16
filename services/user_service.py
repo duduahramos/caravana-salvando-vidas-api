@@ -36,5 +36,10 @@ class UserService:
     def delete(self, id):
         user_model = UserModel.query.filter_by(id=id).first()
 
-        db.session.delete(user_model)
-        db.session.commit()
+        if user_model:
+            db.session.delete(user_model)
+            db.session.commit()
+
+            return [{"message": "Usuário deletado."}, 200]
+        else:
+            return [{"message": "Usuário não localizado."}, 404]

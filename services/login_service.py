@@ -1,7 +1,7 @@
 from flask import request
 
 from models.user_model import UserModel
-from utils.utils import create_jwt
+from utils.auth import create_jwt
 from utils.utils import password_is_correct
 
 

@@ -3,12 +3,14 @@ from marshmallow import ValidationError
 
 from schemas.volunteer_schema import VolunteerSchema
 from services.volunteer_service import VolunteerService
+from utils import auth
 
 
 volunteer_blueprint = Blueprint("volunteer_blueprint", __name__)
 
 
 @volunteer_blueprint.route("/voluntario", methods=["POST"])
+@auth.token_required
 def post_volunteer():
     volunteer_json = request.get_json()
 
@@ -30,6 +32,7 @@ def post_volunteer():
 
 
 @volunteer_blueprint.route("/voluntario", methods=["GET"])
+@auth.token_required
 def get_all_volunteers():
     try:
         volunteer_service = VolunteerService()
@@ -44,13 +47,14 @@ def get_all_volunteers():
 
 
 @volunteer_blueprint.route("/voluntario/<id>", methods=["GET"])
+@auth.token_required
 def get_one_volunteer(id):
     try:
         volunteer_service = VolunteerService()
 
         volunteer_dict, status_code = volunteer_service.get_one_by_id(id)
 
-        return volunteer_dict, 200
+        return volunteer_dict, status_code
     except Exception as e:
         print(e.args)
 
@@ -58,6 +62,7 @@ def get_one_volunteer(id):
 
 
 @volunteer_blueprint.route("/voluntario/<id>", methods=["PUT"])
+@auth.token_required
 def put_volunteer(id):
     try:
         volunteer_service = VolunteerService()
@@ -76,6 +81,7 @@ def put_volunteer(id):
 
 
 @volunteer_blueprint.route("/voluntario/<id>", methods=["DELETE"])
+@auth.token_required
 def delete_volunteer(id):
     try:
         volunteer_service = VolunteerService()

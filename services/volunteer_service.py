@@ -31,14 +31,14 @@ class VolunteerService:
 
             db.session.commit()
 
-            return volunteer_model.to_dict(), 202
+            return [volunteer_model.to_dict(), 202]
         else:
             volunteer_model = VolunteerModel(volunteer_schema)
 
             db.session.add(volunteer_model)
             db.session.commit()
 
-            return volunteer_model.to_dict(), 201
+            return [volunteer_model.to_dict(), 201]
 
     def delete(self, id: str) -> list:
         volunteer_model = VolunteerModel.query.filter_by(id=id).first()
@@ -51,7 +51,7 @@ class VolunteerService:
         else:
             return [{"message": "Registro não localizado."}, 404]
 
-    def get_all(self) -> dict:
+    def get_all(self) -> list:
         page = request.args.get("page", default=1, type=int)
         per_page = request.args.get("per_page", default=20, type=int)
         order_by = request.args.get("order_by", default="id", type=str)
@@ -93,15 +93,20 @@ class VolunteerService:
 
         volunteers_dict_list["voluntarios"] = [volunteer.to_dict() for volunteer in volunteers_list]
 
-        return volunteers_dict_list
+        if volunteers_list:
+            status_code = 200
+        else:
+            status_code = 404
 
-    def get_one_by_id(self, id: str) -> dict:
+        return [volunteers_dict_list, status_code]
+
+    def get_one_by_id(self, id: str) -> list:
         volunteer_model = VolunteerModel.query.filter_by(id=id).first()
 
         if volunteer_model:
-            return volunteer_model.to_dict()
+            return [volunteer_model.to_dict(), 200]
         else:
-            return {"message": "Registro não localizado."}
+            return [{"message": "Registro não localizado."}, 404]
 
     # def get_by_uuid_bd(self, uuid_bytes: bytes) -> VolunteerModel:
     #     volunteer_model = VolunteerModel.query.filter_by(uuid_bd=uuid_bytes).first()
