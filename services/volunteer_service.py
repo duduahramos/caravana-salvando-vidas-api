@@ -47,9 +47,9 @@ class VolunteerService:
             db.session.delete(volunteer_model)
             db.session.commit()
 
-            return [{"message": "Registro deletado."}, 200]
+            return [{"message": "Usuário deletado."}, 200]
         else:
-            return [{"message": "Registro não localizado."}, 404]
+            return [{"message": "Usuário não localizado."}, 404]
 
     def get_all(self) -> list:
         page = request.args.get("page", default=1, type=int)
@@ -106,7 +106,7 @@ class VolunteerService:
         if volunteer_model:
             return [volunteer_model.to_dict(), 200]
         else:
-            return [{"message": "Registro não localizado."}, 404]
+            return [{"message": "Voluntário não localizado."}, 404]
 
     # def get_by_uuid_bd(self, uuid_bytes: bytes) -> VolunteerModel:
     #     volunteer_model = VolunteerModel.query.filter_by(uuid_bd=uuid_bytes).first()

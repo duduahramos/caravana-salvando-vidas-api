@@ -37,6 +37,8 @@ def token_required(function_decorated):
             # session_dict = json.loads(cryptocode.decrypt(token_decoded["session"], SECRET_KEY_SESSION))
             # current_user = UserModel.query.filter_by(user_name=session_dict.get("user_name")).first()
 
+            # chama a funcao que recebeu o decorator e inicializa ela com os argumentos
+            # recebidos na decorated
             return function_decorated(*args, **kwargs)
         except Exception as e:
             print(e.args)
